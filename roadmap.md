@@ -54,6 +54,22 @@
 - YAML formatting matters (comma-space vs comma-no-space)
 - Your pipeline should match your workflow
 
+### Session 2B (2026-06-13 afternoon) — Practice & Manual Testing
+**What we did:**
+1. ✅ **Memory exercises** — Wrote Trivy and gitleaks workflows from scratch
+   - Learned: AI autocomplete produces wrong code that looks right — don't use it while learning
+   - Learned: Write blanks (`???`) for gaps, fill from memory, then check source
+2. ✅ **Manual tool testing** — Ran all 3 tools locally to verify CI workflows
+   - gitleaks: `protect` (PRs) vs `detect` (pushes)
+   - Trivy: `fs . --severity CRITICAL --exit-code 1`
+   - pre-commit: `run --all-files`
+3. ✅ **Updated cheatsheet** — Added local testing commands for all tools
+
+**Practice results:**
+- Trivy: First attempt = 1 line. Final attempt = complete correct workflow
+- gitleaks: First attempt = stopped at `permissions:`. Final attempt = complete correct workflow
+- Key insight: Understanding concepts is strong, execution from memory needs repetition
+
 ---
 
 ## Pending Exercises

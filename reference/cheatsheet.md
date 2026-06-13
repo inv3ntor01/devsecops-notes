@@ -9,6 +9,21 @@
 curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz | tar xz -C /usr/local/bin
 ```
 
+### Manual Testing (Local)
+```bash
+# Install
+curl -sSL https://github.com/gitleaks/gitleaks/releases/download/v8.24.0/gitleaks_8.24.0_linux_x64.tar.gz | tar xz -C /usr/local/bin
+
+# Scan current files only (what the PR sees)
+gitleaks protect --source .
+
+# Scan all git history (what a push sees)
+gitleaks detect --source .
+
+# With SARIF output for upload
+gitleaks detect --source . --report-format sarif --report-path gitleaks.sarif
+```
+
 ### Scan modes
 ```bash
 # Scan current file contents (for PRs)
@@ -22,15 +37,34 @@ gitleaks detect --source . --log-opts "main..HEAD"
 ```
 
 ### Key differences
-| Flag | What it scans | Use case |
+| Command | What it scans | When to use |
 |---|---|---|
-| `protect` | Current file contents only | PRs, fast |
-| `detect` | All commits in git history | Pushes to main, thorough |
+| `protect` | Current file contents only | PRs — fast, catches what's in the diff |
+| `detect` | All commits in git history | Pushes to main — thorough, catches deleted secrets |
 | `detect --log-opts "A..B"` | Commits between A and B | PRs without full history |
+
+### Gotcha: Organization repos require paid license
+- `gitleaks/gitleaks-action@v2` on GitHub Actions requires paid license for orgs
+- Solution: install the CLI binary directly (see Install above)
 
 ---
 
 ## Trivy
+
+### Manual Testing (Local)
+```bash
+# Install
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+
+# Scan dependencies — blocks on CRITICAL
+trivy fs . --severity CRITICAL --exit-code 1
+
+# Scan dependencies — show HIGH too (won't fail)
+trivy fs . --severity HIGH
+
+# SARIF output for GitHub Security tab
+trivy fs . --severity CRITICAL,HIGH --format sarif --output trivy-report.sarif
+```
 
 ### Filesystem scan (dependencies)
 ```bash
@@ -64,6 +98,22 @@ trivy fs . --format sarif --output trivy-report.sarif
 ---
 
 ## Pre-Commit
+
+### Manual Testing (Local)
+```bash
+# Install
+pip install pre-commit
+pre-commit install          # installs hooks for this repo
+
+# Run against ALL files (for testing)
+pre-commit run --all-files
+
+# Run against SPECIFIC files only
+pre-commit run --files .github/workflows/trivy-scan.yml
+
+# Skip a specific hook (for testing)
+SKIP=semgrep pre-commit run --all-files
+```
 
 ### Install locally
 ```bash
@@ -152,3 +202,31 @@ gh pr create --base main --head feature/branch --title "title" --body "body"
 # Open PR in browser
 gh pr view --web
 ```
+
+---
+
+## Local Testing Workflow
+
+The order to test before pushing to GitHub:
+
+```bash
+# 1. Pre-commit (runs automatically on commit, but test manually too)
+pre-commit run --all-files
+
+# 2. gitleaks (catches secrets before push)
+gitleaks protect --source .
+
+# 3. Trivy (catches CVEs before push)
+trivy fs . --severity CRITICAL --exit-code 1
+
+# If all three pass locally → they'll pass on GitHub (95% of the time)
+```
+
+### When to use each test
+
+| When | What to run | Why |
+|---|---|---|
+| Before every commit | pre-commit (auto) | Catches formatting, secrets, bad YAML |
+| Before every push | gitleaks + Trivy | Catches secrets + CVEs that pre-commit misses |
+| Before opening PR | Push to test branch, check `gh run list` | Final verification on actual GitHub runners |
+| When CI fails | `gh run view <id> --log-failed` | See exact error, fix locally, re-test |
