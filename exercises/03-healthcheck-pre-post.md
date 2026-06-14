@@ -12,21 +12,22 @@
 
 1. What is a Docker HEALTHCHECK? (One sentence)
    ```
-   ___
+   it checks the status of an image
    ```
 
 2. Why do containers need one? (What problem does it solve?)
    ```
-   ___
+   it solves dead containers which takes up memory
    ```
 
 3. What's the difference between a container that's "running" and one that's "healthy"?
    ```
-   ___
+   some containers are dead while running, without checking their status you might have dead containers which are running and takes up memory and cpu power.
    ```
 
 4. What happens in Docker (and Kubernetes) when a container's health check fails repeatedly?
    ```
+   it returns crashloopbackerror
    ___
    ```
 
@@ -34,25 +35,25 @@
 
 5. Write a HEALTHCHECK instruction from scratch (make your best guess):
    ```dockerfile
-   HEALTHCHECK ___
+   HEALTHCHECK status
    ```
 
 6. What do these flags mean? (Guess or write "don't know")
    ```
-   --interval=30s        ___
-   --timeout=3s          ___
-   --start-period=40s    ___
-   --retries=3           ___
+   --interval=30s        duration to setup the container
+   --timeout=3s          has a grace period of 3 seconds before having a status of error
+   --start-period=40s    initialization period
+   --retries=3           it retries 3 times before giving up if it stills run as error.
    ```
 
 7. What command would you use to check if a Laravel/PHP web app is healthy?
    ```
-   ___
+   laravel doctor
    ```
 
 8. In a multi-stage Dockerfile (build → deploy), which stage should the HEALTHCHECK go in?
    ```
-   ___
+   on the deployment stage
    ```
 
 ### Context Question
@@ -62,7 +63,7 @@
 
    Where in that file would you add the HEALTHCHECK?
    ```
-   ___
+   on top of the file.
    ```
 
 ---
