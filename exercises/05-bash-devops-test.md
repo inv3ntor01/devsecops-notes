@@ -7,15 +7,15 @@
 
 ## Section 1 — Variables & Exit Codes
 
-1. What does `set -euo pipefail` do? (Line by line)
+1. What does `set -euo pipefail` do? (Line by line) I don't know
 
-2. What's the difference between `$VAR` and `"$VAR"`?
+2. What's the difference between `$VAR` and `"$VAR"`? nothing
 
-3. What does `$?` capture?
+3. What does `$?` capture? the output from the system
 
 4. Write a script that exits with code 1 if a file doesn't exist:
    ```bash
-   ???
+   return exit 1
    ```
 
 ---
@@ -24,7 +24,7 @@
 
 5. Write the syntax to check if a directory exists:
    ```bash
-   ???
+   ls -la
    ```
 
 6. What does this return?
@@ -33,12 +33,12 @@
    echo $?
    ```
    ```
-   ???
+   https://github.com
    ```
 
 7. True or false: `&&` runs the next command only if the previous one succeeded.
    ```
-   ???
+   True
    ```
 
 8. What's the output?
@@ -46,7 +46,7 @@
    false || echo "ran"
    ```
    ```
-   ???
+   ran
    ```
 
 ---
@@ -56,7 +56,7 @@
 9. Write a loop that runs `trivy fs .` on each directory in a list:
    ```bash
    DIRS="src tests vendor"
-   ???
+   RUN="trivy fs ."
    ```
 
 10. What does this output?
@@ -64,13 +64,15 @@
     for i in {1..3}; do echo "$i"; done
     ```
     ```
-    ???
+    1
+    2
+    3
     ```
 
 11. Process each line of a file called `repos.txt`:
     ```bash
     while read -r line; do
-        ???
+        cat respos.txts
     done < repos.txt
     ```
 
@@ -80,16 +82,16 @@
 
 12. Capture the current git branch into a variable:
     ```bash
-    ???
+    $ = git branch
     ```
 
-13. What does `set -o pipefail` specifically prevent?
+13. What does `set -o pipefail` specifically prevent? failed pipeline
 
 14. What's wrong with this?
     ```bash
     output = $(curl -s https://api.github.com/repos/inv3ntor01/larakube-cli)
     ```
-
+it cannot show in the terminal
 ---
 
 ## Section 5 — Functions
@@ -97,48 +99,49 @@
 15. Write a function that exits 1 if a required env var is missing:
     ```bash
     require_env() {
-        ???
+        if env $var == 0
+        return exit 1
     }
     ```
 
 16. What does `local` do inside a function?
-
+local function
 ---
 
 ## Section 6 — Real DevOps Scenarios
 
 17. Write a one-liner to find all `.env` files and delete them:
     ```bash
-    ???
+    return (rm .env)
     ```
 
 18. Diff two JSON files without installing jq:
     ```bash
-    ???
+    cmp json
     ```
 
 19. Check if a port is open on localhost:
     ```bash
-    ???
+    curl http://localhost:{port}
     ```
 
 20. Download a file only if it doesn't exist:
     ```bash
-    ???
+    wget
     ```
 
 21. Suppress stderr but keep stdout:
     ```bash
-    ???
+    stdout
     ```
 
 ---
 
 ## Section 7 — Debugging
 
-22. What does `bash -x script.sh` do?
+22. What does `bash -x script.sh` do? run script.sh via root
 
-23. What's the difference between `echo` and `printf`?
+23. What's the difference between `echo` and `printf`? echo returns a terminal command printf returns a script command
 
 ---
 
