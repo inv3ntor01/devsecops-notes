@@ -72,6 +72,14 @@
 
 ---
 
+### Home Lab Setup (Week 1-2)
+- [x] Cloud Server Setup Guide — `cloud-server-setup.md`
+- [ ] VirtualBox installation
+- [ ] Ubuntu Server minimal install (1GB RAM, 20GB disk)
+- [ ] SSH access from host
+- [ ] Docker on VM
+- [ ] Clone template for future VMs
+
 ## Pending Exercises
 
 ### Exercise 2: Dockerfile HEALTHCHECK
@@ -123,12 +131,17 @@
 - [ ] Dockerfile hardening (Exercise 2)
 - [ ] Dependabot (Exercise 3)
 - [ ] Branch protection (Exercise 4)
+- [ ] Home Lab: VirtualBox + Ubuntu VMs (cloud-server-setup.md)
+- [ ] Home Lab: Docker on local VMs
+- [ ] Home Lab: K3s lightweight Kubernetes
 
 ### Months 4-6: Cloud + K8s Security
-- [ ] AWS fundamentals (EC2, S3, IAM, EKS)
+- [ ] Oracle Cloud Free Tier (when credit card available)
+- [ ] AWS/GCP basics (free tier)
 - [ ] K8s security (Exercises 5)
-- [ ] Terraform/ IaC security
-- [ ] Get Terraform Associate or AWS Security cert
+- [ ] Terraform/ IaC basics
+- [ ] Monitoring (Grafana)
+- [ ] Get certified (CKA or AWS Solutions Architect)
 
 ### Months 7-12: Advanced
 - [ ] Secrets management (Exercise 7)
