@@ -28,6 +28,8 @@
 **Fix for Q1:** The path is `contrib/install.sh`, not `content/install.sh`:
 ```bash
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 ```
 
 ---
@@ -44,6 +46,8 @@ curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/inst
 **Fix for Q9:** Must be `v3.0.1`, not `v3`:
 ```yaml
 uses: pre-commit/action@v3.0.1
+uses: pre-commit/action@v3.0.1
+uses: pre-commit/action@v3.0.1
 ```
 
 ---
@@ -59,6 +63,8 @@ uses: pre-commit/action@v3.0.1
 
 **Fix for Q10:** GitHub Actions use `github/org/repo` format, not `github.com/org/repo`:
 ```yaml
+uses: github/codeql-action/upload-sarif@v3
+uses: github/codeql-action/upload-sarif@v3
 uses: github/codeql-action/upload-sarif@v3
 ```
 The org is `github`, the repo is `codeql-action`. No `.com`.
@@ -107,6 +113,8 @@ Your answer missed: `node_modules`, `dist`, `.vscode`, and got `.idea` wrong (yo
 | 24 | `curl -f http://localhost:80/health \|\| exit 1` | `docker inspect --format='{{.State.Health}}' <container>` | ❌ **Wrong tool — wrote HEALTHCHECK command instead of CLI command** |
 | 25 | `docker inspect --format={{.STATUS.HEALTH}}` | `docker inspect --format='{{.Config.Healthcheck}}' <container>` | ❌ **Wrong field and missing quotes** |
 
+docker inspect --format='{{.State.Health}}' <container>
+docker inspect --format='{{.Config.Healthcheck}}' <container>
 **This is the same confusion as before. Key distinction:**
 
 | Type | Purpose | Example |
@@ -155,6 +163,7 @@ curl -f http://localhost:80/health || exit 1
 ```dockerfile
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 CMD curl -f http://localhost:80/health || exit 1
 ```
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 CMD curl -f http://localhost:80/health || exit 1
 The standard order is: `--interval` → `--timeout` → `--start-period` → `--retries`
 
 ---
@@ -209,17 +218,21 @@ The standard order is: `--interval` → `--timeout` → `--start-period` → `--
 1. **Trivy URL:**
 ```
 curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
+curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin
 ```
 Note: `contrib/` not `content/`
 
 2. **Pre-commit action:**
 ```
 uses: pre-commit/action@v3.0.1
+ses: pre-commit/action@v3.0.1
 ```
 Note: `v3.0.1` not `v3`
 
 3. **SARIF action format:**
 ```
+uses: github/codeql-action/upload-sarif@v3
 uses: github/codeql-action/upload-sarif@v3
 ```
 Note: `github/` not `github.com/`
@@ -230,7 +243,8 @@ docker inspect --format='{{.State.Health}}' <container>
 docker inspect --format='{{.Config.Healthcheck}}' <container>
 ```
 Note: single quotes around `{{}}`, these are Docker CLI commands, not HEALTHCHECK Dockerfile syntax
-
+docker inspect --format-'{{.State.Health}}' <container>
+docker inspect --format='{{.Config.Healthcheck}}' <container>
 ---
 
 ## Next Step
