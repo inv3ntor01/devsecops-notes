@@ -1,0 +1,37 @@
+# DevSecOps: Trivy Filesystem Vulnerability Scan
+# Scans your code dependencies for known CVEs
+# Runs on every push to main and on PRs
+
+name: Security Scan - Trivy
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  trivy-scan:
+    name: Trivy Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run Trivy filesystem scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'           # Filesystem scan (not container image)
+          scan-ref: '.'              # Scan entire repo
+          format: 'sarif'           # Output format for GitHub
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH' # Only fail on critical/high vulnerabilities
+
+      - name: Upload Trivy results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+          category: 'trivy-scan'

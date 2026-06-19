@@ -1,0 +1,80 @@
+# DevSecOps: Combined Security Pipeline
+# Runs all DevSecOps scans in parallel for faster feedback
+# Includes: Trivy, Gitleaks, CodeQL
+
+name: DevSecOps Security Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  # ═══════════════════════════════════════════════════════════
+  # PHASE 1: Secrets Detection
+  # ═══════════════════════════════════════════════════════════
+  secrets-scan:
+    name: Gitleaks - Secrets Detection
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        with:
+          args: --verbose
+        env:
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+
+  # ═══════════════════════════════════════════════════════════
+  # PHASE 2: Vulnerability Scanning
+  # ═══════════════════════════════════════════════════════════
+  vuln-scan:
+    name: Trivy - Vulnerability Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run Trivy scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          scan-ref: '.'
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload to Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+  # ═══════════════════════════════════════════════════════════
+  # PHASE 3: Static Code Analysis
+  # ═══════════════════════════════════════════════════════════
+  code-analysis:
+    name: CodeQL - Static Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: php
+
+      - name: Perform Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:php"

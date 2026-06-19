@@ -1,0 +1,60 @@
+# This file documents the DevSecOps workflows in this repo
+# See: .github/workflows/ for actual workflow files
+
+# WORKFLOWS DOCUMENTATION
+# ─────────────────────────────────────────────────────────────
+#
+# 1. trivy-scan.yml
+#    - Scans filesystem for CVE vulnerabilities
+#    - Runs: on push to main, on PRs
+#    - Output: SARIF format uploaded to GitHub Security tab
+#    - Severity filter: CRITICAL and HIGH only
+#
+# 2. gitleaks-scan.yml
+#    - Detects secrets (API keys, tokens, passwords) in code
+#    - Runs: on push to main, on PRs
+#    - Prevents secrets from reaching main branch
+#
+# 3. docker-best-practices.yml
+#    - Combined security pipeline (parallel execution)
+#    - Includes: Gitleaks, Trivy, CodeQL
+#    - Best for mature projects
+#
+# ─────────────────────────────────────────────────────────────
+#
+# INSTALLATION COMMANDS (for local use)
+# ─────────────────────────────────────────────────────────────
+#
+# Trivy:
+#   curl -sfL https://raw.githubusercontent.com/aquasecurity/trivy/main/contrib/install.sh | sh -s -- -b /usr/local/bin v0.56.0
+#
+# Gitleaks:
+#   brew install gitleaks  # macOS
+#   sudo apt install gitleaks  # Ubuntu/Debian
+#
+# Pre-commit hooks:
+#   pip install pre-commit
+#   pre-commit install
+#
+# ─────────────────────────────────────────────────────────────
+#
+# KEY CONCEPTS
+# ─────────────────────────────────────────────────────────────
+#
+# SARIF: Static Analysis Results Interchange Format
+#   - Standard format for sharing security scan results
+#   - GitHub displays results in Security tab
+#   - Tool-agnostic (Trivy, Semgrep, CodeQL all use it)
+#
+# Gitleaks protect vs detect mode:
+#   - protect: Blocks commit if secret found (pre-commit hook)
+#   - detect:  Scans existing code (CI/CD pipeline)
+#
+# Severity levels:
+#   - CRITICAL: Immediate action required
+#   - HIGH:     Significant risk, patch soon
+#   - MEDIUM:   Moderate risk
+#   - LOW:      Minor risk, schedule update
+#   - UNKNOWN:  Cannot determine severity
+#
+# ─────────────────────────────────────────────────────────────

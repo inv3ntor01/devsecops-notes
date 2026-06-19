@@ -1,0 +1,29 @@
+# DevSecOps: Gitleaks Secrets Detection
+# Prevents accidental commit of API keys, passwords, tokens
+# Runs on every push - stops secrets before they hit main
+
+name: Security Scan - Gitleaks
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  gitleaks:
+    name: Gitleaks Secrets Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Full history for comprehensive scan
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
