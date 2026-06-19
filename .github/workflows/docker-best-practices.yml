@@ -75,7 +75,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Run Semgrep
+      - name: Semgrep
         uses: returntocorp/semgrep-action@v1
         with:
           config: 'auto'
