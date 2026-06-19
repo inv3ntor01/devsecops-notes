@@ -12,6 +12,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   gitleaks:
     name: Gitleaks Secrets Scan
