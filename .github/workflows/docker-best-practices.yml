@@ -37,6 +37,7 @@ jobs:
           args: --verbose
         env:
           GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+          GITHUB_TOKEN: ${{ github.token }}
 
   # ═══════════════════════════════════════════════════════════
   # PHASE 2: Vulnerability Scanning
