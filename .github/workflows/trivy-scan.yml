@@ -15,6 +15,7 @@ on:
 permissions:
   security-events: write
   contents: read
+  actions: read
 
 jobs:
   trivy-scan:

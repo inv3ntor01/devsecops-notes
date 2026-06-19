@@ -12,6 +12,11 @@ on:
     branches:
       - main
 
+permissions:
+  security-events: write
+  contents: read
+  actions: read
+
 jobs:
   # ═══════════════════════════════════════════════════════════
   # PHASE 1: Secrets Detection
