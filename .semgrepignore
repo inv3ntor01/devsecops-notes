@@ -1,0 +1,3 @@
+# Excluded for local dev/learning purposes
+# These are reference docker-compose configs for observability labs
+observability-files/
